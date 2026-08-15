@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: Python tests and MQTT integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Build web assets required by the runtime tests
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+      - name: Start local MQTT broker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mosquitto
+          sudo systemctl start mosquitto
+          python - <<'PY'
+          import socket
+          import time
+
+          deadline = time.monotonic() + 10
+          while time.monotonic() < deadline:
+              try:
+                  with socket.create_connection(("127.0.0.1", 1883), timeout=0.5):
+                      break
+              except OSError:
+                  time.sleep(0.2)
+          else:
+              raise SystemExit("Mosquitto did not become ready on 127.0.0.1:1883")
+          PY
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Dependency check
+        run: python -m pip check
+      - name: Test
+        run: python -m pytest -q
+
+  web:
+    name: Web tests and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Test
+        run: npm test
+      - name: Build
+        run: npm run build
+
+  firmware:
+    name: Firmware host and source checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install Python test dependencies
+        run: python -m pip install -e ".[dev]"
+      - name: Fetch and verify pinned firmware dependencies
+        run: |
+          python scripts/firmware_deps.py fetch
+          python scripts/firmware_deps.py verify
+      - name: Confirm host C compiler
+        run: cc --version
+      - name: Run portable firmware checks
+        run: |
+          python -m pytest -q \
+            tests/test_firmware_protocol_source.py::test_c_protocol_source_contains_required_end_side_contracts \
+            tests/test_firmware_protocol_source.py::test_c_protocol_host_behavior \
+            tests/test_firmware_runtime_source.py::test_runtime_source_has_bounded_uart_and_port_contracts \
+            tests/test_firmware_runtime_source.py::test_freertos_binding_uses_static_official_apis_without_starting_scheduler \
+            tests/test_firmware_runtime_source.py::test_runtime_host_executes_framing_queue_and_replay_scenarios \
+            tests/test_firmware_delivery.py::test_dependency_manifest_and_ignored_outputs_are_pinned \
+            tests/test_firmware_delivery.py::test_keil_project_is_armclang_static_library_without_board_sources

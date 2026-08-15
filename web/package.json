@@ -1,0 +1,30 @@
+{
+  "name": "quadruped-simulation-web",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Three.js mission console for the Embodied Robot LLM Agent simulator",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yile180304/embodied-robot-llm-agent.git",
+    "directory": "web"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "test": "node --test tests/*.test.ts",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "lucide": "^0.468.0",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.169.0",
+    "typescript": "^5.6.3",
+    "vite": "^8.2.1"
+  }
+}

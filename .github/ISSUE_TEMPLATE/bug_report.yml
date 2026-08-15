@@ -1,0 +1,63 @@
+name: Bug report
+description: Report a reproducible problem in the Agent, MQTT, simulation, web UI, or firmware reference.
+title: "[Bug] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: Do not include API keys, private provider URLs, personal data, or sensitive logs.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Python Agent / Tool Registry / Safety
+        - MQTT transport or device service
+        - Simulation Core or world geometry
+        - Three.js Mission Console
+        - C / FreeRTOS / Keil reference
+        - Documentation or release files
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the observed behavior and the expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Provide the smallest deterministic sequence that reproduces the issue.
+      placeholder: |
+        1. Start ...
+        2. Run ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include OS, Python, Node/npm, Broker, browser, and relevant package versions.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence
+      description: Add test output, screenshots, or transcript excerpts after removing secrets and personal information.
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Evidence boundary
+      options:
+        - label: I have identified whether this used FakePlanner or a real model provider.
+          required: true
+        - label: I have identified whether this used direct transport or a real MQTT Broker.
+          required: true
+        - label: I removed API keys, credentials, private URLs, and personal data.
+          required: true
