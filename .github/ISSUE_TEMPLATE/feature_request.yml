@@ -1,0 +1,46 @@
+name: Feature request
+description: Propose a scoped capability or improvement.
+title: "[Feature] "
+labels: []
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user or engineering problem should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Describe observable behavior and how success should be verified.
+    validations:
+      required: true
+  - type: dropdown
+    id: authority
+    attributes:
+      label: Authoritative layer
+      description: Which layer should own the behavior?
+      options:
+        - Agent / Tool Registry / Safety
+        - MQTT protocol or device backend
+        - Python Simulation Core
+        - Three.js visualization only
+        - C / FreeRTOS reference
+        - Documentation / release engineering
+        - Unsure
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Safety and truth boundaries
+      description: Explain how the proposal avoids arbitrary code execution, fake evidence, or browser-owned simulation truth.
+    validations:
+      required: true
+  - type: textarea
+    id: assets
+    attributes:
+      label: External dependencies or assets
+      description: List source URLs, versions/commits, licenses, models, meshes, textures, or services involved.
