@@ -270,14 +270,13 @@ docs/                     面向贡献者、使用者和发布审核的公开文
 
 当前仓库不包含真实机器人控制栈、板级驱动、模型权重或 API Key。GO1 视觉资产已固定放在 `web/public/assets/go1/`，来源为 [MuJoCo Menagerie 的 Unitree GO1 资产](https://github.com/google-deepmind/mujoco_menagerie/tree/da76818e269b82289eba39808e2fb91d679d6994/unitree_go1)，并随目录保留 `NOTICE.md` 与上游 BSD-3-Clause `LICENSE`。它们只在浏览器本地加载；项目不包含 MuJoCo runtime、Unitree SDK、真实电机控制，也不代表 Unitree 官方产品或背书。公开副本默认只证明本机 Mosquitto、FakePlanner 和 Python simulation ground truth；只有显式真实场景生成的 verified Bundle 才证明该次 OpenAI-compatible Tool Calling 链，Provider 品牌仍不能由 model 字符串推断。
 
-发布前请阅读 [GitHub 公开发布审核清单](docs/release/github-publication-checklist.md)。内部交接文档、`.codestable/` 工作流文件、虚拟环境、依赖 checkout、前端 `node_modules`、Keil 中间产物和 `.env` 不应直接上传。
+公开范围与验证记录见 [GitHub 公开发布审核清单](docs/release/github-publication-checklist.md)。内部交接文档、`.codestable/` 工作流文件、虚拟环境、依赖 checkout、前端 `node_modules`、Keil 中间产物和 `.env` 不会进入公开仓库。
 
 ## 产品路线图
 
-1. 完成 GitHub 公开发布审核、许可证决策和干净环境 CI 验证；
-2. 继续评估真实 Provider 的响应延迟与兼容性，但不放宽 Tool Registry、Safety 或真实性证据要求；
-3. 视加载性能数据决定是否拆分前端 bundle 或制作 GO1 GLB/LOD；
-4. 如需实机，再单独进行 STM32 板级移植、传感器/执行器联调和真实时延测量。
+1. 继续评估真实 Provider 的响应延迟与兼容性，但不放宽 Tool Registry、Safety 或真实性证据要求；
+2. 视加载性能数据决定是否拆分前端 bundle 或制作 GO1 GLB/LOD；
+3. 如需实机，再单独进行 STM32 板级移植、传感器/执行器联调和真实时延测量。
 
 ## 文档
 
@@ -287,6 +286,6 @@ docs/                     面向贡献者、使用者和发布审核的公开文
 - [发布审核清单](docs/release/github-publication-checklist.md)
 - [安全策略](SECURITY.md)
 
-## 许可证状态
+## 许可证
 
-本审核稿暂不激活项目自身的正式许可证。候选方案是 MIT，草案位于 `docs/release/LICENSE-MIT.proposed.txt`；GO1 资产已经随目录保留独立 BSD-3-Clause 文本与 NOTICE，目前只需维护者确认项目许可证和版权持有人后生成根目录 `LICENSE`。
+项目代码采用 [MIT License](LICENSE)，版权持有人为 `yile180304`。Unitree GO1 视觉资产保留上游独立 BSD-3-Clause 许可证与 `NOTICE.md`，不受项目 MIT 许可证替代。

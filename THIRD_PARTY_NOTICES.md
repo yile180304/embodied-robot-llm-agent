@@ -60,4 +60,4 @@ All rights reserved.
 
 ## Project license
 
-项目自身许可证尚未由维护者确认。候选 MIT 文本位于 `docs/release/LICENSE-MIT.proposed.txt`，该草案在根目录正式生成 `LICENSE` 前不构成最终授权声明。
+项目自身代码采用 MIT License，完整文本位于根目录 `LICENSE`，版权持有人为 `yile180304`。第三方依赖和 Unitree GO1 视觉资产继续适用各自许可证，本项目的 MIT License 不替代这些上游条款。

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
@@ -43,7 +44,7 @@ def test_dependency_manifest_and_ignored_outputs_are_pinned():
         assert token in dependency_script
     assert ".deps/" in gitignore
     assert "firmware_keil/Objects/" in gitignore
-    assert 'ziglang==0.15.2' in pyproject
+    assert re.search(r'"ziglang==\d+\.\d+\.\d+"', pyproject)
 
 
 def test_keil_project_is_armclang_static_library_without_board_sources():

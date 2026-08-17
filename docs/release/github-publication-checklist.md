@@ -2,7 +2,7 @@
 doc_type: release-checklist
 slug: github-publication
 component: repository
-status: draft
+status: published
 summary: LLM-Agent 首次公开到 GitHub 前的内容、许可证、安全、隐私和仓库设置审核清单。
 tags: [github, release, security, licensing]
 last_reviewed: 2026-08-17
@@ -12,7 +12,7 @@ last_reviewed: 2026-08-17
 
 ## 当前结论
 
-代码、回放、固定验收矩阵、真实模型条件路径和主要演示已经具备公开展示基础，但现在还不应直接 push。仓库已初始化 Git，`origin/main` 指向 `yile180304/embodied-robot-llm-agent`；2026-08-17 通过 GitHub API 核对时该仓库仍为 `PRIVATE`，默认分支为 `main`，远端尚无 Actions workflow。候选公开范围、安全报告入口、CI 和第三方资产声明均已准备；当前唯一法律元数据阻塞是项目正式许可证及版权持有人尚未确认。`.codestable/`、`HANDOFF.md`、`AI_HANDOFF.md`、本机环境和构建产物已由 `.gitignore` 排除。
+代码、回放、固定验收矩阵、真实模型条件路径和主要演示已经完成公开发布审核。仓库 `yile180304/embodied-robot-llm-agent` 使用 `main` 作为默认分支，项目代码采用 MIT License，版权持有人为 `yile180304`；首次 GitHub Actions 的 Python/MQTT、Web 和固件三项检查均通过。`.codestable/`、`HANDOFF.md`、`AI_HANDOFF.md`、本机环境、凭据和构建产物由 `.gitignore` 排除。
 
 2026-08-17 已完成一次原工程复跑和一次干净公开副本验证。加入 README 演示 GIF 后，当前候选公开集合为 127 个文件、约 23.30 MiB，最大单文件为 11.98 MiB；未发现 API Key、Token、私人 Windows 工作区路径、超过 50 MiB 的文件或被禁止的内部目录。扫描命中的 `EMBODIED_AGENT_API_KEY=<local-secret>` 与测试用 `dotenv-key` 均为明确的占位/测试数据，不是有效凭据。
 
@@ -27,17 +27,17 @@ last_reviewed: 2026-08-17
 - GitHub Issue/PR 模板和基础 CI；
 - pip、npm 和 GitHub Actions 的每周 Dependabot 配置；
 - Replay/Evidence 使用说明与精选桌面截图；
-- 候选 MIT 许可证文本，但尚未激活为根目录 `LICENSE`。
+- 根目录正式 MIT `LICENSE`，第三方资产继续保留各自许可证。
 
-## 待维护者拍板
+## 发布决策
 
 | 决策 | 当前建议 | 状态 |
 | --- | --- | --- |
 | GitHub 仓库名 | `embodied-robot-llm-agent`；当前 origin 已使用该名称 | 候选已准备 |
 | 仓库描述 | Safe LangGraph + MQTT + Python/Three.js quadruped simulation MVP | 远端已设置 |
-| 仓库可见性 | 当前保持 private；首次完整 push 和 CI 通过后再切 public | 待执行 |
-| 项目许可证 | MIT；第三方资产各自保留原许可证 | 待确认 |
-| 版权持有人 | 使用公开身份或 GitHub 用户名 | 待填写 |
+| 仓库可见性 | Public | 已确认 |
+| 项目许可证 | MIT；第三方资产各自保留原许可证 | 已确认 |
+| 版权持有人 | `yile180304` | 已确认 |
 | 安全联系人 | 公开后启用 GitHub Private Vulnerability Reporting，不公开邮箱 | 待公开后启用 |
 | `.codestable/` | 不公开 | 已由 `.gitignore` 排除 |
 | `HANDOFF.md` / `AI_HANDOFF.md` | 不公开，包含本机路径和内部交接信息 | 已由 `.gitignore` 排除 |
@@ -98,11 +98,10 @@ web/vite.config.ts
 
 ## 许可证与第三方资产
 
-1. 先确认项目自身许可证和版权持有人。
-2. 确认后，把 `docs/release/LICENSE-MIT.proposed.txt` 中的占位符替换为真实信息，并在根目录生成标准 `LICENSE`。
-3. 核对 `THIRD_PARTY_NOTICES.md` 与实际依赖、lockfile 和分发物一致。
-4. MuJoCo Menagerie GO1 资产已随 `web/public/assets/go1/NOTICE.md`、`LICENSE`、版权声明和来源 commit 保存；任何替换或压缩都必须更新这些记录。
-5. 不要暗示 Unitree、Google DeepMind、OpenAI、Qwen、DeepSeek、LangChain 或其他上游对项目提供背书。
+1. 项目代码采用根目录 MIT `LICENSE`，版权持有人为 `yile180304`。
+2. `THIRD_PARTY_NOTICES.md` 与实际依赖、lockfile 和分发物保持一致。
+3. MuJoCo Menagerie GO1 资产随 `web/public/assets/go1/NOTICE.md`、`LICENSE`、版权声明和来源 commit 保存；任何替换或压缩都必须更新这些记录。
+4. 不暗示 Unitree、Google DeepMind、OpenAI、Qwen、DeepSeek、LangChain 或其他上游对项目提供背书。
 
 ## 发布前验证
 
@@ -134,7 +133,7 @@ Pop-Location
 
 2026-08-17 在原工程最终复跑：Python `204 passed, 1 warning`；真实模型显式 Acceptance Pack `10 passed / 0 failed / 0 skipped`，real-model Bundle 为 `native_tool_calls_verified`；网页 Model Mission 还验证了 `move_robot(distance_m=-0.5)` 经本机 MQTT 成功后退并正常结束。前端 `27 passed`、production build、固件专项 `11 passed`、Keil 静态库构建、`pip check`、`compileall`、`npm audit` 和 `git diff --check` 的既有基线保持通过。
 
-CI 已在 Python job 中先构建 `web/dist`、启动本机 Mosquitto，再执行完整 Python/MQTT 测试；独立 Web job 执行 `npm test` 与 production build；新增 Firmware job 会在 Ubuntu 上获取并验证 pinned cJSON/FreeRTOS，实际编译运行 7 个 portable host/source 检查节点，不依赖或冒充 Keil/ArmClang。Firmware job 的 7 个目标节点已在本机以相同 pytest 选择器验证通过，workflow 也由 checksum 校验后的 `actionlint 1.7.12` 检查通过。这样可以避免干净 checkout 因缺少前端生成物而失败、MQTT 用例被全部跳过，或公开固件层只靠 Windows 本机证据。该 workflow 当前仅存在本地工作树，远端尚无 workflow；必须在 push 后观察首轮 Ubuntu Actions 结果，再把仓库切换为 public。
+CI 在 Python job 中先构建 `web/dist`、启动本机 Mosquitto，再执行完整 Python/MQTT 测试；独立 Web job 执行 `npm test` 与 production build；Firmware job 在 Ubuntu 上获取并验证 pinned cJSON/FreeRTOS，实际编译运行 7 个 portable host/source 检查节点，不依赖或冒充 Keil/ArmClang。首轮 GitHub Actions 三项 job 已全部通过。
 
 ## 隐私和敏感信息检查
 
@@ -151,9 +150,9 @@ rg -n "[A-Za-z]:\\\\|/home/|/Users/|AppData" .
 
 ## GitHub 仓库设置
 
-2026-08-17 只读核对结果：仓库为 private，默认分支 `main`，Actions 已启用且当前允许全部 Actions；`main` 尚无 branch protection，Private Vulnerability Reporting API 尚不可用，远端 workflow 数量为 0。这与“本地发布候选尚未 push”的状态一致，不应在 CI job 尚不存在时提前配置 required checks。
+2026-08-17 发布结果：默认分支为 `main`，Actions 已启用，首轮 Python/MQTT、Web 和 Firmware CI 全部通过；仓库在正式 MIT License 推送并再次验证后切换为 public。
 
-建议在创建仓库后配置：
+公开后建议配置：
 
 - 默认分支 `main`；
 - GitHub Actions 只读 `contents` 权限；
@@ -164,17 +163,17 @@ rg -n "[A-Za-z]:\\\\|/home/|/Users/|AppData" .
 - About 中明确 `simulation-first research prototype`；
 - 不启用 GitHub Pages，除非先设计静态部署方式，因为当前 runtime 依赖 Python API 和 WebSocket。
 
-建议公开顺序：
+已执行的公开顺序：
 
 1. 仓库保持 private，提交并 push 完整发布候选。
-2. 等待首轮 Python 与 Web Actions 全部通过；失败时先在 private 状态修复。
-3. 给 `main` 增加 branch protection，要求 Python tests and MQTT integration、Web tests and build、Firmware host and source checks 三项通过。
-4. 启用 Private Vulnerability Reporting 和 Dependabot alerts。
-5. 最后切换为 public，再从未登录窗口核对 README、图片、许可证和 Actions 可见性。
+2. 等待 Python/MQTT、Web 和 Firmware Actions 全部通过。
+3. 确认 MIT License、版权署名、公开范围和历史密钥扫描。
+4. 推送正式许可证并等待 CI 通过。
+5. 切换为 public，并核对 README、图片、许可证和 Actions 可见性。
 
-## 提交与推送前的建议步骤
+## 后续维护
 
-审核通过后再执行，不要在本轮自动上传：
+后续修改仍应逐项暂存并复核：
 
 ```powershell
 git add .
@@ -182,13 +181,11 @@ git status --short
 git diff --cached --stat
 ```
 
-仓库已存在 `main` 和 `origin`。在人工确认 staged 文件没有内部资料、敏感信息或未授权资产后，再创建 scoped commit 并 push；本轮不自动提交或上传。
+仓库使用 `main` 和 `origin`。人工确认 staged 文件没有内部资料、敏感信息或未授权资产后，再创建 scoped commit 并 push。
 
-## 审核问题
+## 已确认范围
 
-1. 是否采用 MIT 作为项目代码许可证？
-2. LICENSE 中使用真实姓名、GitHub 用户名还是组织名？
-3. 是否公开 C/FreeRTOS/Keil 参考层，还是只发布 Python + Web 主项目？
-4. 是否公开精选 `reports/` 证据？哪些截图和 JSON 可以长期保留？
-5. `.codestable/`、`HANDOFF.md` 和 `AI_HANDOFF.md` 是否保持私有？
-6. 安全联系人使用哪个邮箱，是否只启用 GitHub Private Vulnerability Reporting？
+- 项目代码采用 MIT License，版权署名为 `yile180304`。
+- 公开 Python、Web、C/FreeRTOS/Keil 参考层和 README 引用的精选视觉证据。
+- `.codestable/`、`HANDOFF.md`、`AI_HANDOFF.md`、Acceptance Pack、transcript 和本机配置保持私有。
+- 安全问题通过 GitHub Private Vulnerability Reporting 或不含敏感细节的 Issue 发起联系。
