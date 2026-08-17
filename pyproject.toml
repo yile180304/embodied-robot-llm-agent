@@ -31,7 +31,7 @@ dev = [
     "pytest>=8",
 ]
 firmware-dev = [
-    "ziglang==0.15.2",
+    "ziglang==0.16.0",
 ]
 
 [project.scripts]
